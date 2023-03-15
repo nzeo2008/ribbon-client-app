@@ -7,7 +7,7 @@ export const loginSchema = {
     Validators.compose([
       Validators.required,
       Validators.minLength(2),
-      Validators.maxLength(15),
+      Validators.maxLength(30),
       Validators.pattern(VALID_CHARACTERS_PATTERN),
       Validators.email,
     ]),
@@ -17,7 +17,7 @@ export const loginSchema = {
     Validators.compose([
       Validators.required,
       Validators.minLength(8),
-      Validators.maxLength(24),
+      Validators.maxLength(25),
       Validators.pattern(VALID_CHARACTERS_PATTERN),
     ]),
   ],

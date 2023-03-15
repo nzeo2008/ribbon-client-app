@@ -13,9 +13,9 @@ import { ValidatorService } from './../../service/validator.service';
   styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent {
-  public registerForm: FormGroup;
-  protected hidePassword = true;
-  protected hideConfirm = true;
+  protected registerForm: FormGroup;
+  protected hidePassword: boolean = true;
+  protected hideConfirm: boolean = true;
 
   constructor(
     private authService: AuthService,
@@ -50,16 +50,11 @@ export class RegisterComponent {
       })
       .subscribe({
         next: (data) => {
-          this.tokenStorage.saveToken(data.token);
-          this.tokenStorage.saveUser(data);
-
           this.notificationService.showSnackBar('Успешная регистрация');
-          this.router.navigate(['/']);
-          window.location.reload();
         },
 
         error: (error) => {
-          this.notificationService.showSnackBar(error.message);
+          this.notificationService.showSnackBar('Ошибка при регистрации!');
         },
       });
   }

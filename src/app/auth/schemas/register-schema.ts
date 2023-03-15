@@ -45,7 +45,7 @@ export const registerSchema = {
     Validators.compose([
       Validators.required,
       Validators.minLength(8),
-      Validators.maxLength(24),
+      Validators.maxLength(25),
       Validators.pattern(VALID_CHARACTERS_PATTERN),
       matchValidator('confirmPassword', true),
     ]),
@@ -55,7 +55,7 @@ export const registerSchema = {
     Validators.compose([
       Validators.required,
       Validators.minLength(8),
-      Validators.maxLength(24),
+      Validators.maxLength(25),
       Validators.pattern(VALID_CHARACTERS_PATTERN),
       matchValidator('password'),
     ]),

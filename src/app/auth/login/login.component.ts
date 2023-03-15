@@ -5,6 +5,7 @@ import { TokenStorageService } from 'src/app/service/token-storage.service';
 import { AuthService } from './../../service/auth.service';
 import { NotificationService } from './../../service/notification.service';
 import { loginSchema } from './../schemas/login-schema';
+import { ValidatorService } from '../../service/validator.service';
 
 @Component({
   selector: 'app-login',
@@ -12,16 +13,18 @@ import { loginSchema } from './../schemas/login-schema';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  public loginForm: FormGroup;
+  protected loginForm: FormGroup;
+  protected hidePassword: boolean = true;
   constructor(
     private authService: AuthService,
     private tokenStorage: TokenStorageService,
     private notificationService: NotificationService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    protected validator: ValidatorService
   ) {
     if (this.tokenStorage.getUser()) {
-      this.router.navigate(['main']);
+      this.router.navigate(['/']);
     }
   }
 

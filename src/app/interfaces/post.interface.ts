@@ -7,7 +7,7 @@ export interface IPost {
   location: string;
   image?: File;
   likes?: number;
-  userLiked?: string[];
+  usersLiked?: string[];
   comments?: IComment[];
   username?: string;
 }

@@ -11,9 +11,29 @@ import { authInterceptorProviders } from './guards/auth-interceptor.service';
 import { authErrorInterceptorProvider } from './guards/error-interceptor.service';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { NotfoundComponent } from './notfound/notfound.component';
+import { HomeComponent } from './layout/home/home.component';
+import { NavigationComponent } from './layout/navigation/navigation.component';
+import { ProfileComponent } from './user/profile/profile.component';
+import { UserPostsComponent } from './user/user-posts/user-posts.component';
+import { UserEditComponent } from './user/user-edit/user-edit.component';
+import { CreatePostComponent } from './user/create-post/create-post.component';
+import { PostComponent } from './post/post.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, RegisterComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    RegisterComponent,
+    NotfoundComponent,
+    HomeComponent,
+    NavigationComponent,
+    ProfileComponent,
+    UserPostsComponent,
+    UserEditComponent,
+    CreatePostComponent,
+    PostComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

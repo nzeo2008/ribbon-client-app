@@ -20,14 +20,14 @@ export class ImageUploadService {
 
     uploadData.append('file', file);
 
-    return this.http.post(IMAGE_API_ENDPOINT + postId + '/upload', uploadData);
+    return this.http.post(IMAGE_API_ENDPOINT + '/upload/' + postId, uploadData);
   }
 
   getProfileImage(): Observable<any> {
     return this.http.get(IMAGE_API_ENDPOINT + 'profileImage');
   }
 
-  getImageToPost(postId: number) {
-    return this.http.get(IMAGE_API_ENDPOINT + postId + '/image');
+  getImageToPost(postId: number): Observable<any> {
+    return this.http.get(IMAGE_API_ENDPOINT + 'getImage/' + postId);
   }
 }

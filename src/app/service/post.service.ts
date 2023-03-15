@@ -13,6 +13,10 @@ export class PostService {
     return this.http.post(POST_API_ENDPOINT + 'create', post);
   }
 
+  getPostById(id: number): Observable<any> {
+    return this.http.get(POST_API_ENDPOINT + 'getPost/' + id);
+  }
+
   getAllPosts(): Observable<any> {
     return this.http.get(POST_API_ENDPOINT + 'all');
   }
@@ -22,7 +26,7 @@ export class PostService {
   }
 
   delete(id: number): Observable<any> {
-    return this.http.post(POST_API_ENDPOINT + id + '/delete', null);
+    return this.http.post(POST_API_ENDPOINT + 'delete/' + id, null);
   }
 
   likePost(id: number, username: string): Observable<any> {

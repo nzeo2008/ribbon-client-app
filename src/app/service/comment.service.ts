@@ -10,16 +10,16 @@ export class CommentService {
   constructor(private http: HttpClient) {}
 
   addToCommentToPost(postId: number, message: string): Observable<any> {
-    return this.http.post(COMMENT_API_ENDPOINT + postId + '/create', {
+    return this.http.post(COMMENT_API_ENDPOINT + 'create/' + postId, {
       message,
     });
   }
 
   getCommentsToPost(postId: number): Observable<any> {
-    return this.http.get(COMMENT_API_ENDPOINT + postId + '/all');
+    return this.http.get(COMMENT_API_ENDPOINT + 'all/' + postId);
   }
 
   delete(commentId: number): Observable<any> {
-    return this.http.post(COMMENT_API_ENDPOINT + commentId + '/delete', null);
+    return this.http.post(COMMENT_API_ENDPOINT + 'delete/' + commentId, null);
   }
 }

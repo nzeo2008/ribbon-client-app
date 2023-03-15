@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import jwtDecode from 'jwt-decode';
 import { TOKEN_KEY, USER_KEY } from '../constants/constants';
 import { IUser } from '../interfaces/user.interface';
 
@@ -15,6 +16,10 @@ export class TokenStorageService {
 
   public getToken(): string | null {
     return sessionStorage.getItem(TOKEN_KEY);
+  }
+
+  public getInfoFromJWTToken(token: string): any {
+    return jwtDecode(token);
   }
 
   public saveUser(user: IUser): void {

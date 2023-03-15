@@ -1,0 +1,30 @@
+<div *ngIf="isUserDataLoaded" class="user-profile">
+  <h1>Профиль</h1>
+  <div><button (click)="openEditDialog()">Изменить информацию</button></div>
+
+  <div class="row">
+    <div class="col">
+      <img
+        [src]="
+          previewImgUrl ||
+          formatImage(userProfileImage) ||
+          '../../../assets/user-icon.png'
+        "
+        alt="user-icon.png"
+      />
+      <input type="file" #fileInput (change)="onFileSelected($event)" />
+      <button mat-button (click)="fileInput.click()">
+        Выбрать изображение
+      </button>
+      <button mat-button *ngIf="selectedFile" (click)="onUpload()">
+        Загрузить изображение
+      </button>
+    </div>
+    <div class="col">
+      <h2>{{ user.username }}</h2>
+      <h3>{{ user.firstname }} {{ user.lastname }}</h3>
+    </div>
+    <mat-divider></mat-divider>
+    <router-outlet></router-outlet>
+  </div>
+</div>

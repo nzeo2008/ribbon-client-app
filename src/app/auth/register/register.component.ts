@@ -21,12 +21,12 @@ export class RegisterComponent {
     private authService: AuthService,
     private tokenStorage: TokenStorageService,
     private notificationService: NotificationService,
+    protected validator: ValidatorService,
     private router: Router,
-    private fb: FormBuilder,
-    protected validator: ValidatorService
+    private fb: FormBuilder
   ) {
     if (this.tokenStorage.getUser()) {
-      this.router.navigate(['main']);
+      this.router.navigate(['/']);
     }
   }
 
@@ -54,7 +54,9 @@ export class RegisterComponent {
         },
 
         error: (error) => {
-          this.notificationService.showSnackBar('Ошибка при регистрации!');
+          this.notificationService.showSnackBar(
+            `Ошибка при регистрации: ${error}`
+          );
         },
       });
   }

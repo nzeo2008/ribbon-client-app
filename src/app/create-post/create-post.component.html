@@ -1,0 +1,59 @@
+<section
+  class="d-flex text-center vh-100 justify-content-center align-items-center bg-light p-5"
+>
+  <form
+    [formGroup]="createForm"
+    class="d-flex vh-75 flex-column justify-content-center w-75 align-items-center shadow mx-5 rounded bg-white p-5"
+  >
+    <h1 class="text-primary mb-5">Создать пост</h1>
+    <mat-form-field appearance="outline" class="w-75 mb-3">
+      <mat-label>Название</mat-label>
+      <input #titleInput matInput formControlName="title" />
+      <mat-error *ngIf="createForm.get('title')?.touched">
+        {{ validator.getErrorMessage(createForm, "title") }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-75 mb-3">
+      <mat-label>Локация</mat-label>
+      <input matInput formControlName="location" />
+      <mat-error *ngIf="createForm.get('location')?.touched">
+        {{ validator.getErrorMessage(createForm, "location") }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-75 mb-3">
+      <mat-label>Описание</mat-label>
+      <textarea
+        matInput
+        rows="5"
+        spellcheck="true"
+        formControlName="caption"
+      ></textarea>
+      <mat-error *ngIf="createForm.get('caption')?.touched">
+        {{ validator.getErrorMessage(createForm, "caption") }}
+      </mat-error>
+    </mat-form-field>
+    <div class="mt-2">
+      <input
+        type="file"
+        accept="image/png, image/jpeg"
+        #fileInput
+        (change)="handleFileInput(getFiles($event))"
+        formControlName="file"
+        hidden
+      />
+      <button class="btn btn-primary me-2" (click)="fileInput.click()">
+        Выбрать изображение
+      </button>
+      <span *ngIf="createForm.get('file')?.touched">
+        {{ validator.getErrorMessage(createForm, "file") }}
+      </span>
+      <button
+        (click)="uploadPostToServer(); resetForm()"
+        [disabled]="!createForm.valid"
+        class="btn btn-primary ms-2"
+      >
+        Загрузить пост
+      </button>
+    </div>
+  </form>
+</section>

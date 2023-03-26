@@ -17,8 +17,10 @@ export class PostService {
     return this.http.get(POST_API_ENDPOINT + 'getPost/' + id);
   }
 
-  getAllPosts(): Observable<any> {
-    return this.http.get(POST_API_ENDPOINT + 'all');
+  getAllPosts(pageNum: number = 0, pageSize: number = 10): Observable<any> {
+    return this.http.get(POST_API_ENDPOINT + 'all', {
+      params: { pageNum, pageSize },
+    });
   }
 
   getPostForCurrentUser(): Observable<any> {
@@ -26,12 +28,12 @@ export class PostService {
   }
 
   delete(id: number): Observable<any> {
-    return this.http.post(POST_API_ENDPOINT + 'delete/' + id, null);
+    return this.http.delete(POST_API_ENDPOINT + 'delete/' + id);
   }
 
   likePost(id: number, username: string): Observable<any> {
     return this.http.post(
-      POST_API_ENDPOINT + id + '/' + username + '/like',
+      POST_API_ENDPOINT + 'like/' + id + '/' + username,
       null
     );
   }

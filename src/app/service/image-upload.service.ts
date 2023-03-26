@@ -20,7 +20,7 @@ export class ImageUploadService {
 
     uploadData.append('file', file);
 
-    return this.http.post(IMAGE_API_ENDPOINT + '/upload/' + postId, uploadData);
+    return this.http.post(IMAGE_API_ENDPOINT + 'upload/' + postId, uploadData);
   }
 
   getProfileImage(): Observable<any> {

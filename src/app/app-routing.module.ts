@@ -7,11 +7,16 @@ import { HomeComponent } from './layout/home/home.component';
 import { AuthGuardService } from './guards/auth-guard.service';
 import { UserPostsComponent } from './user/user-posts/user-posts.component';
 import { ProfileComponent } from './user/profile/profile.component';
-import { CreatePostComponent } from './user/create-post/create-post.component';
 import { PostComponent } from './post/post.component';
+import { CreatePostComponent } from './create-post/create-post.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
+  {
+    path: 'create',
+    component: CreatePostComponent,
+    canActivate: [AuthGuardService],
+  },
   {
     path: 'profile',
     component: ProfileComponent,
@@ -20,11 +25,6 @@ const routes: Routes = [
       {
         path: '',
         component: UserPostsComponent,
-        canActivate: [AuthGuardService],
-      },
-      {
-        path: 'create',
-        component: CreatePostComponent,
         canActivate: [AuthGuardService],
       },
     ],

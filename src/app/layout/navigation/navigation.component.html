@@ -23,6 +23,10 @@
     *ngIf="isDataLoaded"
     class="ms-auto d-flex justify-content-center align-items-center"
   >
+    <button routerLink="/create" class="btn btn-dark text-white mx-4">
+      Добавить пост
+    </button>
+
     <h3>{{ this.user.firstname }} {{ this.user.lastname }}</h3>
 
     <button [matMenuTriggerFor]="menu" matTooltip="Profile" mat-icon-button>

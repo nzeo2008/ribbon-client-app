@@ -17,8 +17,8 @@ import { NavigationComponent } from './layout/navigation/navigation.component';
 import { ProfileComponent } from './user/profile/profile.component';
 import { UserPostsComponent } from './user/user-posts/user-posts.component';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
-import { CreatePostComponent } from './user/create-post/create-post.component';
 import { PostComponent } from './post/post.component';
+import { CreatePostComponent } from './create-post/create-post.component';
 
 @NgModule({
   declarations: [

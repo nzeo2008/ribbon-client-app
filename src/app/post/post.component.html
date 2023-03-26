@@ -26,34 +26,132 @@
     <mat-card-content class="p-3 mb-2 fs-5"
       ><p>{{ post.caption }}</p>
     </mat-card-content>
-    <mat-card-actions align="start" *ngIf="isLoggedIn"
-      ><button
-        mat-button
-        (click)="post.id && likePost(post.id)"
-        [ngClass]="
-          post.usersLiked?.indexOf(user.username) !== -1
-            ? 'is-liked'
-            : 'not-liked'
+    <mat-card-actions align="start" *ngIf="isLoggedIn && isUserDataLoaded"
+      ><button mat-button (click)="post.id && likePost(post.id)">
+        <mat-icon *ngIf="post.usersLiked?.indexOf(user.username) === -1"
+          >favorite_border</mat-icon
+        >
+        <mat-icon *ngIf="post.usersLiked?.indexOf(user.username) !== -1"
+          >favorite</mat-icon
+        >
+        Оценить
+      </button>
+      <div
+        class="ms-auto my-3"
+        *ngIf="
+          isLoggedIn && isUserDataLoaded && user.username === post.username
         "
       >
-        <mat-icon>favorite</mat-icon> Оценить
-      </button>
+        <button class="btn btn-outline-success mx-2">Редактировать</button>
+        <button
+          class="btn btn-outline-danger mx-2"
+          (click)="post.id && deletePost(post.id)"
+        >
+          Удалить
+        </button>
+      </div>
     </mat-card-actions>
-    <div>
-      <p *ngFor="let comment of post.comments">
-        <span>{{ comment.username }}</span
-        >: {{ comment.message }}
-      </p>
-    </div>
-    <mat-form-field *ngIf="isLoggedIn">
+    <mat-form-field *ngIf="isLoggedIn && isUserDataLoaded">
       <mat-label>Оставить комментарий...</mat-label>
-      <input
-        (keyup.enter)="post.id && postComment(getValue($event), post.id)"
-        matInput
-        #message
-        maxlength="128"
-      />
+      <div class="d-flex">
+        <input
+          id="message"
+          (keyup.enter)="
+            post.id &&
+              message.value &&
+              postComment(message.value, post.id, user.username);
+            message.value = ''
+          "
+          matInput
+          #message
+          maxlength="128"
+        />
+        <mat-icon
+          (click)="
+            post.id &&
+              message.value &&
+              postComment(message.value, post.id, user.username);
+            message.value = ''
+          "
+          role="button"
+          class="ms-auto mb-2"
+          >send</mat-icon
+        >
+      </div>
       <mat-hint align="end">{{ message.value.length }} / 128</mat-hint>
     </mat-form-field>
   </mat-card>
+  <div class="w-75 d-flex flex-column p-4 shadow bg-white">
+    <span class="h3 mb-3">Комментарии</span>
+    <span
+      class="h5 text-muted"
+      *ngIf="!!post.comments && post.comments.length === 0"
+      >Комментариев к посту ещё нет</span
+    >
+    <div *ngIf="!!post.comments && post.comments.length !== 0">
+      <div
+        *ngFor="let comment of post.comments"
+        class="m-2 bg-light p-2 rounded"
+      >
+        <div class="m-1 d-flex">
+          <span
+            (click)="setValue(comment.username)"
+            role="button"
+            class="text-primary"
+            >{{ comment.username }}</span
+          >:
+          {{
+            comment.updatedDate
+              ? "(Обновлен) " + getDateTime(comment.updatedDate)
+              : "(Создан) " + getDateTime(comment.createdDate)
+          }}
+          <div
+            class="ms-auto"
+            *ngIf="isUserDataLoaded && comment.username === user.username"
+          >
+            <button class="btn btn-outline-success btn-sm mx-1">
+              Редактировать
+            </button>
+            <button
+              (click)="deleteComment(comment.id)"
+              class="btn btn-outline-danger btn-sm mx-1"
+            >
+              Удалить
+            </button>
+          </div>
+        </div>
+        <div class="p-2 d-flex overflow-scroll">
+          <span *ngIf="!comment.message.startsWith('@')">{{
+            comment.message
+          }}</span>
+          <div *ngIf="comment.message.startsWith('@')">
+            <span
+              class="text-danger"
+              role="button"
+              (click)="
+                nameMessage.textContent &&
+                  setValue(nameMessage.textContent.slice(1))
+              "
+              #nameMessage
+              >{{ comment.message.split(" ")[0] }}</span
+            ><span>
+              {{ " " + comment.message.split(" ").slice(1).join(" ") }}</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div
+        *ngIf="!isEndOfComments"
+        class="d-flex align-items-center"
+        (click)="
+          post.id && getMoreCommentsToPost(post.id, pageNumLimit, pageSizeLimit)
+        "
+        role="button"
+      >
+        <mat-icon>keyboard_arrow_down</mat-icon>
+        <span>Показать следующие комментарии</span>
+      </div>
+    </div>
+  </div>
 </section>

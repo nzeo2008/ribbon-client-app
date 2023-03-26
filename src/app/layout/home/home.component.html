@@ -15,7 +15,7 @@
         />
       </div>
       <div>
-        <a href="/post/{{ post.id }}" class="text-decoration-none">
+        <a routerLink="/post/{{ post.id }}" class="text-decoration-none">
           <mat-card-title class="fs-3">{{ post.title }}</mat-card-title>
         </a>
         <mat-card-subtitle>{{ post.location }}</mat-card-subtitle>
@@ -24,39 +24,44 @@
     <img mat-card-image [src]="formatImage(post.image)" alt="post_image" />
     <mat-card-subtitle class="p-2 ms-2 mt-2" align="start"
       >Создан пользователем:
-      <span class="text-dark"> {{ post.username }}</span></mat-card-subtitle
+      <span class="text-dark"> {{ post.username }} </span></mat-card-subtitle
+    >
+    <mat-card-subtitle class="p-2 ms-2 mt-2" align="start"
+      >Дата создания:
+      <span class="text-dark">
+        {{ post.createdDate && getDate(post.createdDate) }}
+      </span></mat-card-subtitle
     >
     <mat-card-content class="p-3 mb-2 fs-5"
       ><p>{{ post.caption }}</p>
     </mat-card-content>
-    <mat-card-actions align="start" *ngIf="isLoggedIn"
-      ><button
-        mat-button
-        (click)="post.id && likePost(post.id, i)"
-        [ngClass]="
-          post.usersLiked?.indexOf(user.username) !== -1
-            ? 'is-liked'
-            : 'not-liked'
+    <mat-card-actions
+      align="start"
+      class="mb-3"
+      *ngIf="isLoggedIn && isUserDataLoaded"
+      ><button mat-button (click)="post.id && likePost(post.id, i)">
+        <mat-icon *ngIf="post.usersLiked?.indexOf(user.username) === -1"
+          >favorite_border</mat-icon
+        >
+        <mat-icon *ngIf="post.usersLiked?.indexOf(user.username) !== -1"
+          >favorite</mat-icon
+        >
+        Оценить
+      </button>
+      <div
+        class="ms-auto"
+        *ngIf="
+          isLoggedIn && isUserDataLoaded && user.username === post.username
         "
       >
-        <mat-icon>favorite</mat-icon> Оценить
-      </button>
+        <button class="btn btn-outline-success mx-2">Редактировать</button>
+        <button
+          class="btn btn-outline-danger mx-2"
+          (click)="post.id && deletePost(post.id)"
+        >
+          Удалить
+        </button>
+      </div>
     </mat-card-actions>
-    <div>
-      <p *ngFor="let comment of post.comments">
-        <span>{{ comment.username }}</span
-        >: {{ comment.message }}
-      </p>
-    </div>
-    <mat-form-field *ngIf="isLoggedIn">
-      <mat-label>Оставить комментарий...</mat-label>
-      <input
-        (keyup.enter)="post.id && postComment(getValue($event), post.id, i)"
-        matInput
-        #message
-        maxlength="128"
-      />
-      <mat-hint align="end">{{ message.value.length }} / 128</mat-hint>
-    </mat-form-field>
   </mat-card>
 </div>

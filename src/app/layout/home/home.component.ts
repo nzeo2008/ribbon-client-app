@@ -7,6 +7,7 @@ import { CommentService } from '../../service/comment.service';
 import { NotificationService } from 'src/app/service/notification.service';
 import { ImageUploadService } from '../../service/image-upload.service';
 import { TokenStorageService } from 'src/app/service/token-storage.service';
+import { CommonService } from '../../service/common.service';
 
 @Component({
   selector: 'app-home',
@@ -19,9 +20,12 @@ export class HomeComponent implements OnInit {
   isPostsLoaded: boolean = false;
   isUserDataLoaded: boolean = false;
   isLoggedIn: boolean = false;
+  pageNum: number = 0;
+  pageSize: number = 4;
 
   constructor(
     private postService: PostService,
+    private commonService: CommonService,
     private userService: UserService,
     private commentService: CommentService,
     private notificationService: NotificationService,
@@ -32,16 +36,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.isLoggedIn = !!this.tokenStorageService.getToken();
 
-    this.postService.getAllPosts().subscribe({
-      next: (data) => {
-        this.posts = data.content;
-        this.isPostsLoaded = true;
-      },
-      error: () => {},
-      complete: () => {
-        this.getImagesToPosts(this.posts);
-      },
-    });
+    this.getAllPosts();
 
     if (this.isLoggedIn) {
       this.userService.getCurrentUser().subscribe((data) => {
@@ -61,6 +56,23 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  getAllPosts() {
+    this.postService.getAllPosts(this.pageNum, this.pageSize).subscribe({
+      next: (data) => {
+        this.posts = data.content;
+        this.isPostsLoaded = true;
+      },
+      error: () => {},
+      complete: () => {
+        this.getImagesToPosts(this.posts);
+      },
+    });
+  }
+
+  getDate(date: string) {
+    return this.commonService.getDate(date);
+  }
+
   getCommentsToPosts(posts: IPost[]): void {
     posts.forEach((post) => {
       if (!post.id) return;
@@ -77,23 +89,43 @@ export class HomeComponent implements OnInit {
     if (!post.usersLiked?.includes(this.user.username)) {
       this.postService.likePost(postId, this.user.username).subscribe(() => {
         post.usersLiked?.push(this.user.username);
-        this.notificationService.showSnackBar('Лайк');
       });
     } else {
       this.postService.likePost(postId, this.user.username).subscribe(() => {
         const index = post.usersLiked?.indexOf(this.user.username, 0);
-        if (index && index >= 0) {
+
+        if (index !== undefined && index >= 0) {
           post.usersLiked?.splice(index, 1);
         }
       });
     }
   }
 
-  postComment(message: string, postId: number, postIndex: number) {
+  deletePost(id: number) {
+    this.postService.delete(id).subscribe({
+      next: () => {},
+      complete: () => {
+        this.notificationService.showSnackBar('Пост успешно удалён');
+        this.getAllPosts();
+      },
+      error: (error) => {
+        this.notificationService.showSnackBar(
+          `Ошибка в удалении поста: ${error}`
+        );
+      },
+    });
+  }
+
+  postComment(
+    message: string,
+    postId: number,
+    postIndex: number,
+    username: string
+  ) {
     const post = this.posts[postIndex];
 
     this.commentService
-      .addToCommentToPost(postId, message)
+      .addToCommentToPost(postId, message, username)
       .subscribe((data) => {
         post.comments?.push(data);
       });

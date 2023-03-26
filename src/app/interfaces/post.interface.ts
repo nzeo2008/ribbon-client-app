@@ -10,4 +10,6 @@ export interface IPost {
   usersLiked?: string[];
   comments?: IComment[];
   username?: string;
+  createdDate?: string;
+  updatedDate?: string;
 }
